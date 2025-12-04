@@ -20,7 +20,9 @@ export function SectionHeading({
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="font-display text-3xl text-sand sm:text-4xl">{title}</h2>
+      <h2 className="firefly-parallax font-display text-3xl text-sand sm:text-4xl">
+        {title}
+      </h2>
       {description ? (
         <p className="max-w-2xl text-sm text-sand/70">{description}</p>
       ) : null}

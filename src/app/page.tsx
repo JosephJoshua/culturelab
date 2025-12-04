@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { EventCard } from "@/components/EventCard";
+import { FireflyOverlay } from "@/components/Firefly";
 import { GalleryGrid } from "@/components/GalleryGrid";
 import { HeroVisual } from "@/components/HeroVisual";
 import { NewsletterForm } from "@/components/Newsletter";
@@ -20,15 +21,41 @@ export default function Home() {
   const latestPosts = blogPosts.slice(0, 3);
   const featuredTier = membershipTiers.find((tier) => tier.highlight);
   const featuredEvent = upcoming[0];
+  const anchorIds = [
+    "hero",
+    "events",
+    "story",
+    "blog",
+    "members",
+    "voices",
+    "footer",
+  ];
+  const anchorLabels = [
+    "开启 · Hero",
+    "活动 · Events",
+    "故事 · Story",
+    "文章 · Blog",
+    "会员 · Members",
+    "社群 · Voices",
+    "瞬间 · Gallery",
+  ];
 
   return (
     <div className="space-y-16 sm:space-y-20">
-      <section className="grid items-center gap-12 lg:grid-cols-[1.1fr_1.1fr]">
+      <FireflyOverlay
+        anchorIds={anchorIds}
+        featuredEvent={featuredEvent}
+        labels={anchorLabels}
+      />
+      <section
+        id="hero"
+        className="grid items-center gap-12 lg:grid-cols-[1.1fr_1.1fr]"
+      >
         <div className="space-y-8">
           <p className="text-xs uppercase tracking-[0.32em] text-amber-200">
             Reading · Culture · Community
           </p>
-          <h1 className="text-balance font-display text-4xl leading-[1.05] text-sand sm:text-5xl lg:text-6xl">
+          <h1 className="firefly-parallax-strong text-balance font-display text-4xl leading-[1.05] text-sand sm:text-5xl lg:text-6xl">
             Curated salons on literature · culture · philosophy.
           </h1>
           <p className="max-w-2xl text-lg leading-8 text-sand/82">
@@ -65,7 +92,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-6">
+      <section id="events" className="space-y-6">
         <SectionHeading
           eyebrow="Upcoming · 即将举办"
           title="Upcoming Events · 即将举办"
@@ -78,7 +105,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      <section id="story" className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-5 rounded-2xl border border-white/10 bg-[#0d1526]/80 p-6 shadow-[0_20px_60px_-32px_rgba(0,0,0,0.7)]">
           <SectionHeading title="Why CultureLab exists · 我们在做什么" />
           <div className="space-y-4 text-lg leading-8 text-sand/82">
@@ -105,7 +132,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-6">
+      <section id="blog" className="space-y-6">
         <SectionHeading
           eyebrow="Latest · 最新文章"
           title="Latest Posts · 最新文章"
@@ -117,7 +144,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <section id="members" className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-4 rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f182b]/80 via-[#0f182b]/80 to-[#0c1322]/80 p-6 shadow-[0_24px_70px_-36px_rgba(0,0,0,0.7)]">
           <SectionHeading
             eyebrow="Membership · 会员计划"
@@ -161,7 +188,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="space-y-6">
+      <section id="voices" className="space-y-6">
         <SectionHeading
           eyebrow="Voices · 社群的声音"
           title="Voices from the community · 社群的声音"
@@ -169,7 +196,7 @@ export default function Home() {
         <TestimonialGrid />
       </section>
 
-      <section className="space-y-6">
+      <section id="footer" className="space-y-6">
         <SectionHeading
           eyebrow="Moments · 活动瞬间"
           title="Moments · 活动瞬间"
