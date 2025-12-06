@@ -10,7 +10,8 @@ export default function MembersPage() {
     <div className="space-y-8">
       <SectionHeading
         eyebrow="Membership · 会员计划"
-        title="Membership · 会员计划"
+        title="Membership"
+        subtitle="会员计划"
         description="支持社区运营，获得稳定席位、更深的讨论以及专属资源。"
       />
       <div className="grid gap-4 lg:grid-cols-3">

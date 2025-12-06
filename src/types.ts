@@ -55,10 +55,32 @@ export interface GalleryItem {
   title: string;
   description: string;
   image: string;
+  href?: string;
 }
 
 export interface Partner {
   id: string;
   name: string;
   url: string;
+  blurb?: string;
+}
+
+export interface SalonNote {
+  id: string;
+  title: string;
+  eventSlug?: string;
+  keyQuestions: string[];
+  viewpoints: string[];
+  quotes: string[];
+  openProblems: string[];
+}
+
+export interface TimelineItem {
+  id: string;
+  title: string;
+  date: string;
+  theme: string;
+  image: string;
+  recapHref?: string;
+  relatedEventSlug?: string;
 }

@@ -1,5 +1,7 @@
+import { MapPin, Tag } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AddToCalendarButton } from "@/components/AddToCalendarButton";
 import { RegistrationPanel } from "@/components/RegistrationPanel";
 import { SectionHeading } from "@/components/SectionHeading";
 import { events, getEventBySlug } from "@/data/site-data";
@@ -16,6 +18,15 @@ export default function EventDetailPage({
     notFound();
   }
 
+  const tagsCombined = event.tags.join(" · ");
+  const materialsPublic =
+    // @ts-expect-error optional field on Event
+    event.materialsPublic === true || event.priceCNY === 0;
+  const seatsLeft =
+    event.capacity && event.registeredCount !== undefined
+      ? Math.max(event.capacity - event.registeredCount, 0)
+      : null;
+
   return (
     <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
       <div className="space-y-6">
@@ -23,23 +34,50 @@ export default function EventDetailPage({
           title={event.title}
           description={event.shortDescription}
         />
-        <div className="flex flex-wrap items-center gap-3 text-sm text-sand/70">
+        <div className="flex flex-wrap items-center gap-2 text-sm text-sand/75">
           <span className="rounded-full border border-white/10 px-3 py-1">
             {formatDateTime(event.dateTime)}
-          </span>
-          <span className="rounded-full border border-white/10 px-3 py-1">
-            {event.location}
-          </span>
-          <span className="rounded-full border border-white/10 px-3 py-1">
-            {event.isOnline ? "线上" : "线下"}
           </span>
           <span className="rounded-full border border-white/10 px-3 py-1">
             {formatPrice(event.priceCNY)}
           </span>
         </div>
+        <div className="flex flex-col gap-3 text-xs text-sand/70 sm:flex-row sm:flex-wrap sm:items-center">
+          <span className="inline-flex min-h-[36px] items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5">
+            <MapPin size={12} />
+            <span className="text-sand/80">{event.location}</span>
+          </span>
+          <span className="inline-flex min-h-[36px] items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5">
+            <Tag size={12} />
+            <span className="text-sand/80">
+              {[event.format, tagsCombined].filter(Boolean).join(" · ")}
+            </span>
+          </span>
+          <span className="inline-flex min-h-[30px] items-center rounded-full border border-white/12 px-3 py-1 text-xs">
+            {event.isOnline ? "线上" : "线下"}
+          </span>
+          {materialsPublic ? (
+            <span className="inline-flex min-h-[30px] items-center rounded-full border border-emerald-200/30 bg-emerald-200/10 px-3 py-1 text-[11px] text-emerald-100">
+              材料公开
+            </span>
+          ) : null}
+          {seatsLeft !== null ? (
+            <span className="inline-flex min-h-[30px] items-center rounded-full border border-white/12 bg-white/5 px-3 py-1 text-[11px] text-sand/75">
+              {seatsLeft <= 4 ? "名额紧张" : "名额充足"} ·{" "}
+              {event.registeredCount ?? 0}/{event.capacity}
+            </span>
+          ) : null}
+          <AddToCalendarButton
+            event={event}
+            label="添加到日历"
+            className="min-h-[30px] text-[11px] px-3 py-1"
+          />
+        </div>
         <div className="space-y-3 rounded-2xl border border-white/10 bg-[#0e1525]/70 p-5 text-sand/80">
           {event.longDescription.split("\\n\\n").map((paragraph) => (
-            <p key={paragraph.slice(0, 18)}>{paragraph}</p>
+            <p key={paragraph.slice(0, 18)} className="leading-relaxed">
+              {paragraph}
+            </p>
           ))}
         </div>
         <div className="grid gap-4 md:grid-cols-2">
@@ -69,7 +107,7 @@ export default function EventDetailPage({
           </div>
           <div className="rounded-2xl border border-white/10 bg-[#0f182a]/80 p-4">
             <h3 className="text-lg font-semibold text-sand">
-              你会收获 / Takeaways
+              收获 / Takeaways
             </h3>
             <ul className="mt-3 space-y-2 text-sm text-sand/75">
               {(
@@ -108,34 +146,18 @@ export default function EventDetailPage({
             </ul>
           </div>
           <div className="rounded-2xl border border-white/10 bg-[#0f182a]/80 p-4">
-            <h3 className="text-lg font-semibold text-sand">
-              你会收获 / Takeaways
-            </h3>
-            <ul className="mt-3 space-y-2 text-sm text-sand/75">
-              {(
-                event.takeaways ?? [
-                  "讨论提纲与共读笔记",
-                  "活动微信群，后续信息同步",
-                  "延伸书单与资料",
-                ]
-              ).map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-cyan-300" />
-                  <span>{item}</span>
-                </li>
+            <h3 className="text-lg font-semibold text-sand">标签 Tags</h3>
+            <div className="mt-3 flex flex-wrap gap-2 text-xs text-sand/70">
+              {event.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1"
+                >
+                  {tag}
+                </span>
               ))}
-            </ul>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-wrap gap-2 text-xs text-sand/70">
-          {event.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-white/10 px-2 py-1"
-            >
-              {tag}
-            </span>
-          ))}
         </div>
         <Link
           href="/events"

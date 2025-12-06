@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(cuid())
+  phone       String    @unique
+  displayName String?
+  createdAt   DateTime  @default(now())
+  lastLoginAt DateTime? 
+  sessions    Session[]
+}
+
+model Session {
+  id               String   @id @default(cuid())
+  user             User     @relation(fields: [userId], references: [id])
+  userId           String
+  refreshTokenHash String
+  userAgent        String?
+  ip               String?
+  expiresAt        DateTime
+  createdAt        DateTime @default(now())
+}
+
+model PhoneCode {
+  id         String   @id @default(cuid())
+  phone      String
+  codeHash   String
+  channel    String   @default("login")
+  expiresAt  DateTime
+  attempts   Int      @default(0)
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  @@index([phone, channel])
+}
+
+model Event {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  shortDescription String
+  longDescription String
+  dateTime        DateTime
+  location        String
+  priceCNY        Int
+  capacity        Int?
+  registeredCount Int      @default(0)
+  isOnline        Boolean
+  format          String?
+  tags            String[]
+  wechatGroupQR   String?
+  paymentQRs      Json?
+  materialsPublic Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  registrations   Registration[]
+}
+
+model Registration {
+  id         String   @id @default(cuid())
+  event      Event    @relation(fields: [eventId], references: [id])
+  eventId    String
+  name       String
+  wechat     String
+  email      String?
+  subscribe  Boolean  @default(true)
+  status     String   @default("confirmed") // confirmed | waitlist
+  paymentMethod String?
+  createdAt  DateTime @default(now())
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String?
+  wechat    String?
+  consent   Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model MembershipInterest {
+  id        String   @id @default(cuid())
+  tier      String
+  contactEmail String?
+  contactWechat String?
+  subscribe Boolean @default(true)
+  createdAt DateTime @default(now())
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  date      DateTime
+  excerpt   String
+  content   String
+  tags      String[]
+  relatedEventId String?
+  relatedEvent   Event?  @relation(fields: [relatedEventId], references: [id])
+}
+
+model Partner {
+  id    String @id @default(cuid())
+  name  String
+  url   String
+  blurb String?
+}
+
+model GalleryItem {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  image       String
+  href        String?
+}

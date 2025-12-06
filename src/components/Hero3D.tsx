@@ -2,7 +2,7 @@
 
 import { Float, Html, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import type { Event } from "@/types";
 
 function formatAgenda(event?: Event) {
@@ -261,40 +261,58 @@ function SalonVignette({ featuredEvent }: { featuredEvent?: Event }) {
 }
 
 export function Hero3D({ featuredEvent }: { featuredEvent?: Event }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div className="relative h-full min-h-[480px] w-full overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#0d1423] via-[#0b1020] to-[#0f182a] shadow-[0_40px_140px_-60px_rgba(0,0,0,0.8)]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(242,166,90,0.16),transparent_40%),radial-gradient(circle_at_80%_10%,rgba(88,192,201,0.18),transparent_35%),radial-gradient(circle_at_50%_80%,rgba(255,255,255,0.06),transparent_45%)]" />
-      <Suspense
-        fallback={
-          <div
-            className="absolute inset-0 animate-pulse rounded-3xl bg-white/5"
-            aria-hidden="true"
-          />
-        }
-      >
-        <Canvas camera={{ position: [6.2, 3.6, 7], fov: 38 }} dpr={[1, 2]}>
-          <ambientLight intensity={0.6} />
-          <directionalLight
-            position={[4.5, 4.5, 3]}
-            intensity={1.15}
-            color="#f2a65a"
-          />
-          <directionalLight
-            position={[-3.5, 3.2, -2]}
-            intensity={0.75}
-            color="#58c0c9"
-          />
-          <SalonVignette featuredEvent={featuredEvent} />
-          <OrbitControls
-            enablePan={false}
-            minDistance={3}
-            maxDistance={16}
-            enableZoom
-            autoRotate
-            autoRotateSpeed={0.55}
-          />
-        </Canvas>
-      </Suspense>
+      {mounted ? (
+        <Suspense
+          fallback={
+            <div
+              className="absolute inset-0 animate-pulse rounded-3xl bg-white/5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <Canvas
+            key="hero-3d"
+            camera={{ position: [6.2, 3.6, 7], fov: 38 }}
+            dpr={[1, 2]}
+            resize={{ scroll: true, debounce: 0 }}
+          >
+            <ambientLight intensity={0.6} />
+            <directionalLight
+              position={[4.5, 4.5, 3]}
+              intensity={1.15}
+              color="#f2a65a"
+            />
+            <directionalLight
+              position={[-3.5, 3.2, -2]}
+              intensity={0.75}
+              color="#58c0c9"
+            />
+            <SalonVignette featuredEvent={featuredEvent} />
+            <OrbitControls
+              enablePan={false}
+              minDistance={3}
+              maxDistance={16}
+              enableZoom
+              autoRotate
+              autoRotateSpeed={0.55}
+            />
+          </Canvas>
+        </Suspense>
+      ) : (
+        <div
+          className="absolute inset-0 animate-pulse rounded-3xl bg-white/5"
+          aria-hidden="true"
+        />
+      )}
       <div className="pointer-events-none absolute inset-0 rounded-3xl border border-white/5" />
     </div>
   );

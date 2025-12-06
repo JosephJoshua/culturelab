@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { Providers } from "@/components/Providers";
 
 const puhuiti = localFont({
   src: [
@@ -65,7 +66,7 @@ export default function RootLayout({
           <div className="relative z-10 flex min-h-screen flex-col">
             <Navbar />
             <main className="mx-auto w-full max-w-[1180px] flex-1 px-6 pb-20 pt-10 sm:px-8 lg:px-10">
-              {children}
+              <Providers>{children}</Providers>
             </main>
             <Footer />
           </div>

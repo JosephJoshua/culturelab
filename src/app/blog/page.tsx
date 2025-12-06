@@ -22,7 +22,8 @@ export default function BlogPage() {
     <div className="space-y-8">
       <SectionHeading
         eyebrow="Blog · 阅读札记"
-        title="Blog · 阅读札记"
+        title="Explore the blog."
+        subtitle="阅读札记"
         description="公开发布的活动回顾、笔记与播客摘要，方便分享给还没来现场的朋友。"
       />
       <div className="flex flex-wrap gap-3">

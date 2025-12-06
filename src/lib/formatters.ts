@@ -17,3 +17,12 @@ export function formatPrice(priceCNY: number) {
   }
   return `¥${priceCNY}`;
 }
+
+export function formatDate(date: string) {
+  const formatter = new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+  return formatter.format(new Date(date));
+}

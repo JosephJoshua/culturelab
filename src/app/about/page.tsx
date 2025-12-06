@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { GalleryGrid } from "@/components/GalleryGrid";
 import { SectionHeading } from "@/components/SectionHeading";
 import { partners } from "@/data/site-data";
@@ -72,7 +73,7 @@ export default function AboutPage() {
       </div>
 
       <div className="space-y-4">
-        <SectionHeading title="Team · 团队" />
+        <SectionHeading title="Meet the team." subtitle="团队" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {team.map((member) => (
             <div
@@ -89,23 +90,48 @@ export default function AboutPage() {
 
       <div className="space-y-4">
         <SectionHeading
-          title="Moments · 活动瞬间"
+          title="Recent moments."
+          subtitle="活动瞬间"
           description="现场氛围、共读笔记、小组讨论的碎片。"
         />
         <GalleryGrid />
       </div>
 
       <div className="space-y-4 rounded-2xl border border-white/10 bg-[#0d1526]/80 p-6">
-        <SectionHeading title="Partners & Collaborators · 合作伙伴" />
-        <div className="flex flex-wrap gap-3">
+        <SectionHeading
+          title="Partners and collaborators."
+          subtitle="合作伙伴"
+        />
+        <div className="grid gap-3 sm:grid-cols-2">
           {partners.map((partner) => (
-            <div
+            <Link
               key={partner.id}
-              className="rounded-full border border-white/10 px-4 py-2 text-sm text-sand/80 backdrop-blur transition hover:border-amber-300/60 hover:text-amber-100"
+              href={partner.url}
+              className="group flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-sand/80 transition hover:border-amber-300/60 hover:bg-white/8 hover:text-amber-100"
             >
-              {partner.name}
-            </div>
+              <div className="flex items-center justify-between">
+                <span className="text-base font-semibold text-sand group-hover:text-amber-100">
+                  {partner.name}
+                </span>
+                <span className="text-xs text-amber-200">了解更多 →</span>
+              </div>
+              {partner.blurb ? (
+                <p className="text-sand/70">{partner.blurb}</p>
+              ) : null}
+            </Link>
           ))}
+        </div>
+        <div className="rounded-2xl border border-cyan-200/30 bg-cyan-200/10 p-4 text-sm text-sand">
+          <p className="text-base font-semibold text-sand">
+            提案合作 / Propose a collaboration
+          </p>
+          <p className="mt-1 text-sand/80">
+            写信至{" "}
+            <a className="text-amber-200" href="mailto:hello@culturelab.cn">
+              hello@culturelab.cn
+            </a>{" "}
+            或添加微信：culturelab。我们欢迎联合策展、场地共建与品牌共创。
+          </p>
         </div>
       </div>
     </div>

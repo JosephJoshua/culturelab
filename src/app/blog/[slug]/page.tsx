@@ -12,7 +12,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
   return (
     <article className="mx-auto max-w-3xl space-y-6">
-      <SectionHeading title={post.title} description={post.excerpt} />
+      <SectionHeading
+        title={post.title}
+        subtitle={post.tags.join(" · ")}
+        description={post.excerpt}
+      />
       <div className="flex flex-wrap items-center gap-3 text-sm text-sand/70">
         <span className="rounded-full border border-white/10 px-3 py-1">
           {post.date}

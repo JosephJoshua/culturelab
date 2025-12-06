@@ -34,7 +34,8 @@ export default function EventsPage() {
     <div className="space-y-10">
       <SectionHeading
         eyebrow="Events · 活动"
-        title="Events · 活动"
+        title="Browse our events."
+        subtitle="活动"
         description="查看即将举办与往期活动。点击卡片进入报名或阅读详情。"
       />
 
@@ -68,7 +69,7 @@ export default function EventsPage() {
           </Link>
         </div>
         {filteredUpcoming.length ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 overflow-x-auto sm:grid-cols-[repeat(auto-fit,minmax(480px,1fr))]">
             {filteredUpcoming.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
@@ -83,7 +84,7 @@ export default function EventsPage() {
       <div className="space-y-6">
         <h3 className="text-lg font-semibold text-sand">Past · 往期活动</h3>
         {filteredPast.length ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 overflow-x-auto sm:grid-cols-[repeat(auto-fit,minmax(480px,1fr))]">
             {filteredPast.map((event) => (
               <EventCard key={event.id} event={event} muted />
             ))}

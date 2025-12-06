@@ -6,7 +6,8 @@ export default function AdminPage() {
     <div className="space-y-8">
       <SectionHeading
         eyebrow="Admin · 演示"
-        title="Admin · 管理后台（演示）"
+        title="Admin demo."
+        subtitle="管理后台（演示）"
         description="用于展示未来内部工具的样貌。按钮暂不具备真实功能。"
       />
       <div className="grid gap-6 lg:grid-cols-2">

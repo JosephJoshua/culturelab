@@ -7,7 +7,7 @@ interface Props {
 
 export function PostCard({ post }: Props) {
   return (
-    <article className="group flex h-full flex-col justify-between rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f1728]/70 via-[#0d1525]/70 to-[#0a1020]/70 p-5 backdrop-blur">
+    <article className="group relative flex h-full flex-col justify-between rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f1728]/70 via-[#0d1525]/70 to-[#0a1020]/70 p-5 backdrop-blur shimmer-card">
       <div className="flex flex-col gap-3">
         <p className="text-xs uppercase tracking-[0.25em] text-sand/60">
           {post.date}

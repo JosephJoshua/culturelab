@@ -19,7 +19,8 @@ export default function PayPage({
     <div className="space-y-6">
       <SectionHeading
         eyebrow="Payment · 支付"
-        title="完成支付 · Complete Payment"
+        title="Complete your payment."
+        subtitle="完成支付"
       />
       <PaymentPanel event={event} initialMethod={method} />
     </div>

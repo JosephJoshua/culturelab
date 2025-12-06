@@ -1,7 +1,6 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
-import { newsletterCopy } from "@/data/site-data";
 import { trackEvent } from "@/lib/analytics";
 
 export function NewsletterForm() {
@@ -31,11 +30,7 @@ export function NewsletterForm() {
       onSubmit={handleSubmit}
       className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#0f1829]/80 to-[#10182b]/70 p-6 shadow-[0_20px_60px_-32px_rgba(0,0,0,0.7)]"
     >
-      <h3 className="text-xl font-semibold text-sand">
-        {newsletterCopy.title}
-      </h3>
-      <p className="mt-2 text-sm text-sand/70">{newsletterCopy.description}</p>
-      <div className="mt-4 flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         <label className="text-sm text-sand/70">
           邮箱 Email（可选）
           <input

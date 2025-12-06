@@ -24,10 +24,10 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md">
       <div
-        className={`mx-auto flex max-w-6xl items-center justify-between rounded-b-3xl border border-white/10 px-4 py-3 transition-all sm:px-6 ${
+        className={`mx-auto flex max-w-6xl items-center justify-between rounded-b-3xl border px-4 py-3 transition-all sm:px-6 ${
           scrolled
-            ? "bg-gradient-to-br from-[#0e1525]/90 via-[#0b1220]/90 to-[#0f182b]/90 shadow-lg shadow-black/30"
-            : "bg-gradient-to-br from-[#0e1525]/70 via-[#0b1220]/70 to-[#0f182b]/70"
+            ? "border-white/12 bg-gradient-to-br from-[#0e1525]/90 via-[#0b1220]/90 to-[#0f182b]/90 shadow-lg shadow-black/30 shadow-[0_1px_0_rgba(255,255,255,0.08)]"
+            : "border-white/10 bg-gradient-to-br from-[#0e1525]/70 via-[#0b1220]/70 to-[#0f182b]/70"
         }`}
       >
         <Link
@@ -47,6 +47,12 @@ export function Navbar() {
             </Link>
           ))}
           <Link
+            href="/events"
+            className="rounded-full border border-amber-200/40 px-4 py-2 text-sm font-semibold text-amber-100 transition hover:border-amber-200/80 hover:text-amber-50"
+          >
+            近期活动
+          </Link>
+          <Link
             href="/account"
             className="rounded-full bg-amber-400/90 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-300"
           >
@@ -56,7 +62,7 @@ export function Navbar() {
         <button
           type="button"
           aria-label="打开菜单"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-sand/80 md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/12 text-sand/80 md:hidden"
           onClick={() => setOpen((prev) => !prev)}
         >
           <span className="text-base leading-none">{open ? "×" : "☰"}</span>
