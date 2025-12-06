@@ -301,8 +301,8 @@ export function FireflyOverlay({
         setSpeed((prev) => prev * 0.6 + dist * 0.4 * 16.6); // approximate px/sec
       }
       setCenterRender({ x, y });
-      setTrail((prev) => [...prev, { x, y }].slice(-42));
-    }, 60);
+      setTrail((prev) => [...prev, { x, y }].slice(-64));
+    }, 50);
     return () => {
       window.removeEventListener("mousemove", handleMouse);
       window.clearInterval(interval);
@@ -322,8 +322,8 @@ export function FireflyOverlay({
   const trailPoints =
     trail.length > 1 ? trail.map((p) => `${p.x},${p.y}`).join(" ") : undefined;
   const speedNorm = Math.min(1, Math.max(0, speed / 520));
-  const trailWidth = 1.8 + speedNorm * 1.8;
-  const trailOpacity = 0.55 + speedNorm * 0.45;
+  const trailWidth = 2.4 + speedNorm * 2.4;
+  const trailOpacity = 0.6 + speedNorm * 0.4;
 
   useEffect(() => {
     document.documentElement.style.setProperty(

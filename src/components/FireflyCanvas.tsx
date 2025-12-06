@@ -1,164 +1,8 @@
 "use client";
 
-import { Float, Sparkles } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
 import { motion } from "framer-motion";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Color, type Mesh, type MeshStandardMaterial } from "three";
+import { useEffect, useMemo, useState } from "react";
 import type { Event } from "@/types";
-import { WebGLContextManager } from "./WebGLContextManager";
-
-function Glow() {
-  const mat = useRef<MeshStandardMaterial>(null);
-  const amber = useMemo(() => new Color("#f2a65a"), []);
-  const teal = useMemo(() => new Color("#58c0c9"), []);
-  useFrame(({ clock }) => {
-    const t = (Math.sin(clock.getElapsedTime() * 0.25) + 1) / 2;
-    if (mat.current) {
-      const mixed = amber.clone().lerp(teal, t * 0.32);
-      mat.current.emissive.copy(mixed);
-      mat.current.color.copy(mixed.clone().offsetHSL(0, -0.1, 0.08));
-    }
-  });
-  return (
-    <mesh>
-      <sphereGeometry args={[0.2, 36, 36]} />
-      <meshStandardMaterial
-        ref={mat}
-        emissive="#f2a65a"
-        emissiveIntensity={2.6}
-        color="#f7c17c"
-        transparent
-        opacity={0.92}
-      />
-    </mesh>
-  );
-}
-
-function Aura() {
-  const mat = useRef<MeshStandardMaterial>(null);
-  const amber = useMemo(() => new Color("#f2a65a"), []);
-  const teal = useMemo(() => new Color("#58c0c9"), []);
-  useFrame(({ clock }) => {
-    const t = (Math.sin(clock.getElapsedTime() * 0.22 + 0.6) + 1) / 2;
-    if (mat.current) {
-      const mixed = amber.clone().lerp(teal, t * 0.4);
-      mat.current.emissive.copy(mixed.multiplyScalar(0.6));
-      mat.current.color.copy(mixed.clone().offsetHSL(0, -0.08, 0.04));
-    }
-  });
-  return (
-    <mesh>
-      <sphereGeometry args={[0.42, 24, 24]} />
-      <meshStandardMaterial
-        ref={mat}
-        emissive="#58c0c9"
-        emissiveIntensity={0.9}
-        color="#58c0c9"
-        transparent
-        opacity={0.28}
-      />
-    </mesh>
-  );
-}
-
-function Wings() {
-  const left = useRef<Mesh>(null);
-  const right = useRef<Mesh>(null);
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
-    const flap = Math.sin(t * 8) * 0.35;
-    if (left.current) {
-      left.current.rotation.z = -0.3 + flap;
-      left.current.renderOrder = 2;
-    }
-    if (right.current) {
-      right.current.rotation.z = 0.3 - flap;
-      right.current.renderOrder = 2;
-    }
-  });
-  return (
-    <group position={[0, 0.1, 0]}>
-      <mesh
-        ref={left}
-        position={[-0.22, 0.02, 0]}
-        rotation={[-0.2, 0, -0.32]}
-        scale={[1.25, 0.8, 1]}
-        renderOrder={2}
-      >
-        <circleGeometry args={[0.26, 32]} />
-        <meshStandardMaterial
-          color="#9ad4d9"
-          transparent
-          opacity={0.42}
-          emissive="#9ad4d9"
-          emissiveIntensity={0.55}
-          roughness={0.08}
-          metalness={0.05}
-          depthWrite={false}
-          side={2}
-        />
-      </mesh>
-      <mesh
-        ref={right}
-        position={[0.22, 0.02, 0]}
-        rotation={[-0.2, 0, 0.32]}
-        scale={[1.25, 0.8, 1]}
-        renderOrder={2}
-      >
-        <circleGeometry args={[0.26, 32]} />
-        <meshStandardMaterial
-          color="#f6d29a"
-          transparent
-          opacity={0.4}
-          emissive="#f6d29a"
-          emissiveIntensity={0.48}
-          roughness={0.08}
-          metalness={0.05}
-          depthWrite={false}
-          side={2}
-        />
-      </mesh>
-    </group>
-  );
-}
-
-function Tail() {
-  const mat = useRef<MeshStandardMaterial>(null);
-  const amber = useMemo(() => new Color("#f2a65a"), []);
-  const teal = useMemo(() => new Color("#58c0c9"), []);
-  useFrame(({ clock }) => {
-    const t = (Math.sin(clock.getElapsedTime() * 0.3 + 1.2) + 1) / 2;
-    if (mat.current) {
-      const mixed = amber.clone().lerp(teal, t * 0.35);
-      mat.current.emissive.copy(mixed);
-      mat.current.color.copy(mixed.clone().offsetHSL(0, -0.06, 0.05));
-    }
-  });
-  return (
-    <group position={[0, -0.1, 0]}>
-      <mesh position={[0, -0.08, 0]}>
-        <cylinderGeometry args={[0.03, 0.01, 0.18, 12]} />
-        <meshStandardMaterial
-          ref={mat}
-          color="#f2a65a"
-          emissive="#f2a65a"
-          emissiveIntensity={0.8}
-          roughness={0.1}
-          metalness={0.2}
-        />
-      </mesh>
-      <Sparkles
-        color="#f6d29a"
-        count={12}
-        speed={0.8}
-        size={2}
-        opacity={0.7}
-        scale={[0.8, 0.8, 0.8]}
-      />
-    </group>
-  );
-}
 
 export default function FireflyCanvas({
   featuredEvent,
@@ -168,7 +12,6 @@ export default function FireflyCanvas({
   badgeText?: string;
 }) {
   const [mounted, setMounted] = useState(false);
-  const [canvasKey, setCanvasKey] = useState(0);
   const agenda = useMemo(() => {
     if (badgeText) return badgeText;
     if (!featuredEvent) return "CultureLab Salon";
@@ -177,73 +20,83 @@ export default function FireflyCanvas({
 
   useEffect(() => {
     setMounted(true);
-    const forceRender = () => {
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new Event("resize"));
-      }
-    };
-    forceRender();
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        setTimeout(forceRender, 100);
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    const interval = setInterval(() => {
-      if (document.visibilityState === "visible") {
-        window.dispatchEvent(new Event("scroll"));
-      }
-    }, 2000);
-    // Force a couple of early re-mounts to avoid WebGL timing quirks
-    setCanvasKey((k) => k + 1);
-    const bump = setTimeout(() => setCanvasKey((k) => k + 1), 180);
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      clearInterval(interval);
-      clearTimeout(bump);
-    };
   }, []);
 
   return (
     <div className="relative h-24 w-24 sm:h-32 sm:w-32" style={{ willChange: "transform" }}>
       {mounted && (
-        <Canvas
-          key={canvasKey}
-          className="absolute inset-0"
-          camera={{ position: [0, 0, 3], fov: 38, near: 0.1, far: 50 }}
-          dpr={[1, 1.4]}
-          gl={{
-            antialias: true,
-            alpha: true,
-            powerPreference: "high-performance",
-            preserveDrawingBuffer: true,
-            failIfMajorPerformanceCaveat: false,
-          }}
-          style={{ pointerEvents: "none" }}
-        >
-          <Suspense
-            fallback={
-              <mesh>
-                <sphereGeometry args={[0.24, 12, 12]} />
-                <meshStandardMaterial color="#f2a65a" emissive="#f2a65a" emissiveIntensity={1.2} />
-              </mesh>
-            }
+        <div className="pointer-events-none relative h-full w-full">
+          <motion.div
+            className="absolute inset-0 rounded-full bg-gradient-to-br from-amber-300/35 via-transparent to-cyan-300/25 blur-2xl"
+            animate={{ opacity: [0.7, 1, 0.7], scale: [0.96, 1.04, 0.96] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center"
+            animate={{ rotate: [0, 3, -2, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           >
-            <WebGLContextManager />
-            <ambientLight intensity={0.9} />
-            <directionalLight
-              position={[2, 2, 3]}
-              intensity={1.2}
-              color="#f4c27e"
-            />
-            <Float speed={1} rotationIntensity={0.4} floatIntensity={0.6}>
-              <Glow />
-              <Aura />
-              <Tail />
-              <Wings />
-            </Float>
-          </Suspense>
-        </Canvas>
+            <div className="relative h-20 w-14 sm:h-24 sm:w-16">
+              <motion.div
+                className="absolute inset-4 rounded-full bg-amber-200/80 blur-md"
+                animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-amber-300 to-cyan-300 shadow-[0_0_24px_rgba(242,166,90,0.6)]"
+                animate={{ scale: [0.98, 1.02, 0.98] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              />
+              {/* wings */}
+              <motion.div
+                className="absolute left-[2%] top-1/2 h-8 w-12 -translate-y-1/2 rounded-[999px] bg-gradient-to-br from-cyan-200/60 via-cyan-200/20 to-transparent blur-sm"
+                style={{ transformOrigin: "100% 50%" }}
+                animate={{ rotate: [-10, 14, -12, 0], scaleY: [1, 1.08, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="absolute right-[2%] top-1/2 h-8 w-12 -translate-y-1/2 rounded-[999px] bg-gradient-to-bl from-amber-200/60 via-amber-200/20 to-transparent blur-sm"
+                style={{ transformOrigin: "0% 50%" }}
+                animate={{ rotate: [12, -14, 10, 0], scaleY: [1, 1.08, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              />
+              {/* tail spark */}
+              <motion.div
+                className="absolute bottom-[10%] left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-amber-300 shadow-[0_0_12px_rgba(242,166,90,0.9)]"
+                animate={{ y: [0, -2, 0], scale: [1, 1.1, 1] }}
+                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+              />
+              {/* floating particles */}
+              {[...Array(10)].map((_, i) => {
+                const delay = i * 0.2;
+                const size = i % 3 === 0 ? 3 : 2;
+                return (
+                  <motion.div
+                    key={i}
+                    className="absolute rounded-full bg-amber-200/80 shadow-[0_0_8px_rgba(242,166,90,0.6)]"
+                    style={{
+                      width: size,
+                      height: size,
+                      left: `${30 + (i % 5) * 12}%`,
+                      top: `${30 + (i % 4) * 14}%`,
+                    }}
+                    animate={{
+                      x: [0, (i % 2 === 0 ? -1 : 1) * 6, 0],
+                      y: [0, (i % 2 === 0 ? 1 : -1) * 6, 0],
+                      opacity: [0.6, 1, 0.6],
+                    }}
+                    transition={{
+                      duration: 3 + i * 0.1,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
       )}
       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-amber-300/30 via-transparent to-cyan-300/20 blur-2xl" />
       <motion.div
